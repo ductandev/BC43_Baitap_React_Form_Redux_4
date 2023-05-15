@@ -2,17 +2,38 @@ import React, { Component } from 'react'
 import FormInputSinhVien from './FormInputSinhVien'
 // import thư viện kết nối với redux store
 import { connect } from 'react-redux'
-import {deleteSinhVien, editSinhVien, updateSinhVien} from '../redux/reducers/sinhVienReducer'
+import { deleteSinhVien, editSinhVien, updateSinhVien, searchSinhVien } from '../redux/reducers/sinhVienReducer'
+import "./style.css"
 
 class ReactForm extends Component {
 
+    handleSearch = (e) => {
+        let {value} = e.target ;
+
+        const action = searchSinhVien({value });
+        this.props.dispatch(action);
+    }
+
     render() {
-        
-        let {arrSinhVien, valuesInput} = this.props.sinhVienReducer;
+
+        let { arrSinhVien, valuesInput } = this.props.sinhVienReducer;
 
         return (
             <div className='container mt-2'>
-                <FormInputSinhVien/>
+                <FormInputSinhVien />
+
+                <div className="row my-2">
+                    <div className="col">
+                        <div className="input-group">
+                            <input type="text" className="form-control form__input" placeholder="Tìm theo mã sinh viên 🔍" id="searchMaSV" onInput={this.handleSearch}/>
+                            <div className="input-group-prepend">
+                                <span className="input-group-text h-100 rounded-0 rounded-end-2">
+                                    <i className="fa fa-search" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <table className='table mt-2'>
                     <thead className='bg-dark text-white fw-bold'>
@@ -27,26 +48,26 @@ class ReactForm extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {arrSinhVien.map(sv=>{
+                        {arrSinhVien.map(sv => {
                             return <tr key={sv.maSV}>
                                 <td>{sv.maSV}</td>
                                 <td>{sv.hoTen}</td>
                                 <td>{sv.soDienThoai}</td>
                                 <td>{sv.email}</td>
                                 <td>
-                                    <button className="btn btn-primary" onClick={()=>{
+                                    <button className="btn btn-primary" onClick={() => {
                                         const action = editSinhVien(sv);
                                         this.props.dispatch(action);
                                     }}>Edit</button>
                                 </td>
                                 <td>
-                                    <button className="btn btn-danger" onClick={()=>{
+                                    <button className="btn btn-danger" onClick={() => {
                                         const action = deleteSinhVien(sv.maSV);
                                         this.props.dispatch(action);
                                     }}>Del</button>
                                 </td>
                                 <td>
-                                    <button className="btn btn-success" onClick={()=>{
+                                    <button className="btn btn-success" onClick={() => {
                                         const action = updateSinhVien(valuesInput);
                                         this.props.dispatch(action);
                                     }}>Update</button>

@@ -17,6 +17,8 @@ const initialState = {
     hoTen: '(*)',
     email: '(*)',
   },
+  variable: '0',
+  arrSinhVienBackUp: [],
 }
 
 const sinhVienReducer = createSlice({
@@ -151,9 +153,28 @@ const sinhVienReducer = createSlice({
         }
       }
     },
+    searchSinhVien: (state, action) =>{
+      const {value} = action.payload;
+      
+      if(state.variable === '0'){
+        state.arrSinhVienBackUp = state.arrSinhVien
+        state.variable = '1';
+        console.log('A')
+      }
+      if  (value === ''){
+        state.variable =  '0';
+        state.arrSinhVien = state.arrSinhVienBackUp
+        console.log('B')
+      }
+      if (value !== ''){
+        let result = state.arrSinhVienBackUp.filter(sv => sv.maSV === value);
+        state.arrSinhVien = result;
+        console.log('C')
+      }
+    },
   }
 });
 
-export const { addSinhVienAction, validationSinhVien, editSinhVien, deleteSinhVien, updateSinhVien } = sinhVienReducer.actions
+export const { addSinhVienAction, validationSinhVien, editSinhVien, deleteSinhVien, updateSinhVien, searchSinhVien } = sinhVienReducer.actions
 
 export default sinhVienReducer.reducer
