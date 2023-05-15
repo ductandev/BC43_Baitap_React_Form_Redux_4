@@ -28,8 +28,8 @@ const sinhVienReducer = createSlice({
     addSinhVienAction: (state, action) => {
       const svInfo = { ...action.payload };
 
-      for (let key in state.errors){
-        if (state.errors[key] !== ''){
+      for (let key in state.errors) {
+        if (state.errors[key] !== '') {
           alert('Dữ liệu nhập chưa hợp lệ !');
           return
         }
@@ -37,9 +37,13 @@ const sinhVienReducer = createSlice({
 
       // Check maSV trùng
       let maSVAdd = state.arrSinhVien.findIndex(sv => sv.maSV === state.valuesInput.maSV);
-      if (maSVAdd === -1){
+      if (maSVAdd === -1) {
         // ADD SV
-        state.arrSinhVien.push(svInfo)    
+        state.arrSinhVien.push(svInfo)
+        // Clear form
+        for (let key in state.valuesInput) {
+          state.valuesInput[key] = '';
+        }
       } else {
         alert('Mã sinh viên đã tồn tại, vui lòng nhập mã Sinh viên khác !!!')
       }
@@ -119,54 +123,56 @@ const sinhVienReducer = createSlice({
       }
       state.valuesInput[id] = value;
     },
-    deleteSinhVien: (state, action) =>{
+    deleteSinhVien: (state, action) => {
       const maSVDel = action.payload;
       let indexDel = state.arrSinhVien.findIndex(sv => sv.maSV === maSVDel);
-      if (indexDel !== -1){
+      if (indexDel !== -1) {
         state.arrSinhVien.splice(indexDel, 1);
       }
     },
-    editSinhVien: (state, action) =>{
+    editSinhVien: (state, action) => {
       // Delete error
-      for(let key in state.errors){
+      for (let key in state.errors) {
         state.errors[key] = '';
       }
 
-      const svEdit = {...action.payload}
+      const svEdit = { ...action.payload }
       // console.log(svEdit)
-      if(svEdit){
-        for (let key in svEdit){
+      if (svEdit) {
+        for (let key in svEdit) {
           state.valuesInput[key] = svEdit[key];
         }
       }
     },
-    updateSinhVien: (state,action) =>{
-      console.log(action.payload)
-      let svUpdate = {...action.payload}
+    updateSinhVien: (state, action) => {
+      // console.log(action.payload)
+      let svUpdate = { ...action.payload }
       let indexUpdate = state.arrSinhVien.find(sv => sv.maSV === svUpdate.maSV)
-      if (indexUpdate){
-        for(let key in indexUpdate){
-            // check validation trước khi cho update
-            if(state.errors[key] === ''){
-              indexUpdate[key] = svUpdate[key];
-            }
+      for (let key in state.errors) {
+        if (state.errors[key] !== '') {
+          alert(state.errors[key])
+          return
         }
       }
+      for (let index in indexUpdate){
+        indexUpdate[index] = svUpdate[index];
+      }
+
     },
-    searchSinhVien: (state, action) =>{
-      const {value} = action.payload;
-      
-      if(state.variable === '0'){
+    searchSinhVien: (state, action) => {
+      const { value } = action.payload;
+
+      if (state.variable === '0') {
         state.arrSinhVienBackUp = state.arrSinhVien
         state.variable = '1';
         // console.log('A')
       }
-      if  (value === ''){
-        state.variable =  '0';
+      if (value === '') {
+        state.variable = '0';
         state.arrSinhVien = state.arrSinhVienBackUp
         // console.log('B')
       }
-      if (value !== ''){
+      if (value !== '') {
         let result = state.arrSinhVienBackUp.filter(sv => sv.maSV === value);
         state.arrSinhVien = result;
         // console.log('C')
