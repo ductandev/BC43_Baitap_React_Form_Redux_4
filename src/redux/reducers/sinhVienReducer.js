@@ -159,17 +159,17 @@ const sinhVienReducer = createSlice({
       if(state.variable === '0'){
         state.arrSinhVienBackUp = state.arrSinhVien
         state.variable = '1';
-        console.log('A')
+        // console.log('A')
       }
       if  (value === ''){
         state.variable =  '0';
         state.arrSinhVien = state.arrSinhVienBackUp
-        console.log('B')
+        // console.log('B')
       }
       if (value !== ''){
         let result = state.arrSinhVienBackUp.filter(sv => sv.maSV === value);
         state.arrSinhVien = result;
-        console.log('C')
+        // console.log('C')
       }
     },
   }
