@@ -4,6 +4,8 @@ const initialState = {
   arrSinhVien: [
     { maSV: '1', soDienThoai: '0988888888', hoTen: 'Nguyễn Văn A', email: 'nguyenvana@gmail.com' },
     { maSV: '2', soDienThoai: '0999999999', hoTen: 'Nguyễn Văn B', email: 'nguyenvanb@gmail.com' },
+    { maSV: '68', soDienThoai: '0979797979', hoTen: 'Nguyễn Đức Tấn', email: 'nguyenductan@gmail.com' },
+    { maSV: '79', soDienThoai: '0968686888', hoTen: 'Nguyễn Tấn', email: 'nguyenductan@gmail.com' },
   ],
   valuesInput: {
     maSV: '',
@@ -160,7 +162,27 @@ const sinhVienReducer = createSlice({
 
     },
     searchSinhVien: (state, action) => {
-      const { value } = action.payload;
+
+      const stringToSlug = (str) => {
+        // remove accents
+        var from = "àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ",
+            to   = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy";
+        for (var i=0, l=from.length ; i < l ; i++) {
+          str = str.replace(RegExp(from[i], "gi"), to[i]);
+        }
+      
+        str = str.toLowerCase()
+              .trim()
+              .replace(/[^a-z0-9]/g, '-')
+              .replace(/-+/g, '-');
+      
+        return str;
+      }
+
+
+
+      let { value } = action.payload;
+      value = stringToSlug(value);
 
       if (state.variable === '0') {
         state.arrSinhVienBackUp = state.arrSinhVien
@@ -173,7 +195,8 @@ const sinhVienReducer = createSlice({
         // console.log('B')
       }
       if (value !== '') {
-        let result = state.arrSinhVienBackUp.filter(sv => sv.maSV === value || sv.hoTen === value || sv.soDienThoai === value || sv.email === value);
+        // let result = state.arrSinhVienBackUp.filter(sv => sv.maSV === value || sv.hoTen === value || sv.soDienThoai === value || sv.email === value);
+        let result = state.arrSinhVienBackUp.filter(sv => stringToSlug(sv.maSV).search(value) !== -1 || stringToSlug(sv.hoTen).search(value) !== -1 || stringToSlug(sv.soDienThoai).search(value) !== -1 || stringToSlug(sv.email).search(value) !== -1);
         state.arrSinhVien = result;
         // console.log('C')
       }
