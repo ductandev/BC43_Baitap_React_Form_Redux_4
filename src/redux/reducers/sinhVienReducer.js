@@ -173,7 +173,7 @@ const sinhVienReducer = createSlice({
         // console.log('B')
       }
       if (value !== '') {
-        let result = state.arrSinhVienBackUp.filter(sv => sv.maSV === value);
+        let result = state.arrSinhVienBackUp.filter(sv => sv.maSV === value || sv.hoTen === value || sv.soDienThoai === value || sv.email === value);
         state.arrSinhVien = result;
         // console.log('C')
       }
